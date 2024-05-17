@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const { forgotpasswordMail } = require("../config/mail");
+const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
 const SECRET_KEY = process.env.JWT;
@@ -30,6 +31,9 @@ const register = async (req, res) => {
       user,
     });
   } catch (error) {
+    if (error instanceof Sequelize.ValidationError) {
+      return res.status(400).json({ error: "Validation error",});
+  }
     res.status(500).json({ error });
   }
 };
