@@ -3,6 +3,7 @@ const sequelize = require("./config/connect");
 const userrouter = require("./routers/userroutes");
 const categoryrouter = require("./routers/categoryroutes");
 const productrouter= require('./routers/productroutes')
+const billrouter = require('./routers/billroutes')
 
 const app = express();
 require("dotenv").config();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use("/user", userrouter);
 app.use("/category",categoryrouter);
 app.use("/product",productrouter)
+app.use("/bill",billrouter);
 
 app.get("/", (req, res) => {
   res.send("hello");

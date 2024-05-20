@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h3 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+        }
+        .details div {
+            width: 45%;
+        }
+        .product-list {
+            margin: 20px 0;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+        }
+        .product-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .product-list th, .product-list td {
+            border: 1px solid #bdc3c7;
+            text-align: left;
+            padding: 10px;
+        }
+        .product-list th {
+            background-color: #2980b9;
+            color: white;
+        }
+        .total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            padding: 10px;
+            background-color: #bdc3c7;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Cafe Management System</h3>
+        <div class="details">
+            <div>
+                <p><strong>Name:</strong> <%= name %></p>
+                <p><strong>Email:</strong> <%= email %></p>
+            </div>
+            <div>
+                <p><strong>Contact Number:</strong> <%= contactNumber %></p>
+                <p><strong>Payment Method:</strong> <%= paymentMethod %></p>
+            </div>
+        </div>
+        <div class="product-list">
+            <h4>Product Details</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Sub Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% productDetails.forEach(product => { %>
+                        <tr>
+                            <td><%= product.name %></td>
+                            <td><%= product.category %></td>
+                            <td><%= product.quantity %></td>
+                            <td><%= product.price %></td>
+                            <td><%= product.total %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        <div class="total">
+            <span>Total Amount:</span>
+            <span><%= totalAmount %></span>
+        </div>
+        <div class="footer">
+            <p>Thank you for visiting, please visit again!</p>
+        </div>
+    </div>
+</body>
+</html>

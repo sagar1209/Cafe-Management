@@ -32,8 +32,8 @@ const register = async (req, res) => {
     });
   } catch (error) {
     if (error instanceof Sequelize.ValidationError) {
-      return res.status(400).json({ error: "Validation error",});
-  }
+      return res.status(400).json({ error: "Validation error" });
+    }
     res.status(500).json({ error });
   }
 };
@@ -97,8 +97,7 @@ const forgotpassword = async (req, res) => {
       from: "sagarsenjaliya423@gmail.com",
       to: email,
       subject: "password by cafe management",
-      html:
-      `
+      html: `
       <p>
       <b>Dear ${user.name},</b>
     </p>
