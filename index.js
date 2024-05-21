@@ -4,13 +4,16 @@ const userrouter = require("./routers/userroutes");
 const categoryrouter = require("./routers/categoryroutes");
 const productrouter= require('./routers/productroutes')
 const billrouter = require('./routers/billroutes');
-const dashboardrouter = require('./routers/dashboardroutes')
+const dashboardrouter = require('./routers/dashboardroutes');
+const cors = require('cors');
+
 
 const app = express();
 require("dotenv").config();
 
 const PORT = process.env.PORT || 3001;
 
+app.use(cors());
 app.use(express.json());
 app.use("/user", userrouter);
 app.use("/category",categoryrouter);
