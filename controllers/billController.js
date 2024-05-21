@@ -5,7 +5,7 @@ const pdf = require("html-pdf");
 const path = require("path");
 const fs = require("fs");
 const uuid = require("uuid");
-const { all } = require("../routers/billroutes");
+const { sendReportmail } = require("../config/mail");
 
 const generateBill = async (req, res) => {
   try {
@@ -69,6 +69,61 @@ const generateBill = async (req, res) => {
         }
       });
     });
+    const mailOptions = {
+      from: "sagarsenjaliya423@gmail.com",
+      to: email,
+      subject: "Bill Invoice",
+      html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <table width="100%" style="border-collapse: collapse; margin: 20px 0;">
+          <tr>
+            <td style="padding: 20px; background-color: #f7f7f7; text-align: center;">
+              <h1 style="color: #333;">Cafe Management</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 20px;">
+              <p>Dear ${name},</p>
+              <p>Thank you for your recent purchase. Please find attached your invoice for the transaction.</p>
+              <h2 style="color: #333;">Invoice Details:</h2>
+              <table style="width: 100%; border: 1px solid #ddd; margin-top: 10px;">
+                <tr>
+                  <td style="padding: 10px; border: 1px solid #ddd;">Contact Number:</td>
+                  <td style="padding: 10px; border: 1px solid #ddd;">${contactNumber}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; border: 1px solid #ddd;">Payment Method:</td>
+                  <td style="padding: 10px; border: 1px solid #ddd;">${paymentMethod}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; border: 1px solid #ddd;">Total Amount:</td>
+                  <td style="padding: 10px; border: 1px solid #ddd;">${totalAmount}</td>
+                </tr>
+              </table>
+              <p style="margin-top: 20px;">If you have any questions or need further assistance, please feel free to contact us.</p>
+              <p>Thank you for your business!</p>
+              <p>Best regards,<br><strong>Cafe Management</strong></p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 20px; background-color: #f7f7f7; text-align: center;">
+              <p style="font-size: 12px; color: #777;">Cafe Management, wood square, suart,india</p>
+              <p style="font-size: 12px; color: #777;">&copy; ${new Date().getFullYear()} Cafe Management. All rights reserved.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    `,
+      attachments: [
+        {
+          filename: `${name}.pdf`,
+          content: fs.createReadStream(pdfPath),
+          contentType: "application/pdf",
+        },
+      ],
+    };
+
+    sendReportmail(mailOptions);
     res.download(pdfPath, `${name}.pdf`, (err) => {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -167,7 +222,14 @@ const getPdf = async (req, res) => {
 const allBills = async (req, res) => {
   try {
     const bills = await Bill.findAll({
-      attributes: ["id","uuid", "name", "email", "contactNumber", "paymentMethod"],
+      attributes: [
+        "id",
+        "uuid",
+        "name",
+        "email",
+        "contactNumber",
+        "paymentMethod",
+      ],
     });
     res.status(200).json(bills);
   } catch (error) {
@@ -177,27 +239,26 @@ const allBills = async (req, res) => {
   }
 };
 
-const deletebill = async(req,res)=>{
-    try {
-        const {id} = req.params;
-         const deletedRows =  await Bill.destroy({
-            where:{
-                id
-            }
-         })
-         if(deletedRows===0){
-            return res.status(400).json({error :"Bill not found"})
-         }
-         return res.status(200).json({ message: "Bill deleted successfully" });
-    } catch (error) {
-        return res.status(500).json({ error: "Internal server error" });
+const deletebill = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedRows = await Bill.destroy({
+      where: {
+        id,
+      },
+    });
+    if (deletedRows === 0) {
+      return res.status(400).json({ error: "Bill not found" });
     }
-}
-
+    return res.status(200).json({ message: "Bill deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
   generateBill,
   getPdf,
   allBills,
-  deletebill
+  deletebill,
 };

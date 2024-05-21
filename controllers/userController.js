@@ -9,7 +9,7 @@ const {
   generateHasePassword,
   verifyPassword,
 } = require("../config/hash_password");
-const { generateToken, verifyToken } = require("../config/auth");
+const { generateToken } = require("../config/auth");
 
 const register = async (req, res) => {
   try {
@@ -150,9 +150,38 @@ const reset_password = async (req, res) => {
       message: "password update successufully",
     });
   } catch (error) {
+    if (error instanceof Sequelize.ValidationError) {
+      return res.status(400).json({ error: "Validation error" });
+    }
     res.status(500).json({ error });
   }
 };
+
+const changePassword = async(req,res)=>{
+    try {
+        const {old_password,new_password} = req.body;
+        const {email} = req.local;
+        const user = await User.findOne({
+          where:{email}
+        })
+ 
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+        const isMatch = await  verifyPassword(old_password,user.password);
+        if(!isMatch) return res.status(400).json({error : "old_password incorrect"})
+        user.password = await generateHasePassword(new_password);
+      
+        await user.save();
+        res.status(200).json({message : "password updated successfully"})
+        
+    } catch (error) {
+      if (error instanceof Sequelize.ValidationError) {
+        return res.status(400).json({ error: "Validation error" });
+      }
+      res.status(500).json({ error: "internal server error"});
+    } 
+}
 
 const allUser = async (req, res) => {
   try {
@@ -221,6 +250,7 @@ module.exports = {
   login,
   forgotpassword,
   reset_password,
+  changePassword,
   allUser,
   activeOrUnactive,
   logOut,

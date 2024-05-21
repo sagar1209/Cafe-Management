@@ -16,15 +16,23 @@ const addProduct = async (req, res) => {
 
 const allProduct = async (req, res) => {
   try {
-    let products = await Product.findAll({
-      include: [
-        {
-          model: Category,
-          as: "category",
-          attributes: ["category"],
-        },
-      ],
-    });
+    const { category } = req.query;
+    console.log(category);
+
+    let include = [
+      {
+        model: Category,
+        as: "category",
+        attributes: ["category"],
+      },
+    ];
+    if (category) {
+      include[0].where = {
+        category,
+      };
+    }
+    let products = await Product.findAll({include});
+    console.log(products);
     products = products.map((product) => {
       return {
         id: product.id,

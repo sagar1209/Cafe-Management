@@ -20,7 +20,18 @@ const forgotpasswordMail = async(mailOptions)=>{
     });
 }
 
+const sendReportmail = async(mailOptions)=>{
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.error("Error occurred:", error);
+    } else {
+      console.log("Email sent successfully:", info.response);
+    }
+  });
+}
+
 module.exports = {
     forgotpasswordMail
+    ,sendReportmail
 }
 
