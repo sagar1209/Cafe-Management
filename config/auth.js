@@ -26,6 +26,17 @@ const verifyToken = async (req, res, next,secretKey=process.env.JWT) => {
     }
 }
 
+const checkToken = async(req,res,secretKey=process.env.JWT)=>{
+   try {
+      const {token} = req.params;
+      if(!token)  res.status(400).json({message : false})
+      jwt.verify(token,secretKey);
+      res.status(200).json({message : true});
+   } catch (error) {
+       res.status(400).json({message : false})
+   }
+}
+
 const expireToken = async(req,res,next)=>{
     try {
         const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
@@ -40,5 +51,6 @@ const expireToken = async(req,res,next)=>{
 module.exports = {
     generateToken,
     verifyToken,
-    expireToken
+    expireToken,
+    checkToken
 };
