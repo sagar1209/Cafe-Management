@@ -68,7 +68,6 @@ const login = async (req, res) => {
     const token = await generateToken(payLoad, SECRET_KEY);
     res.status(200).json({ message: "Login successfully", token });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error });
   }
 };
@@ -114,7 +113,7 @@ const forgotpassword = async (req, res) => {
       Please click the link below to reset your password:
     </p>
     <p>
-      <a href="http://localhost:3000/reset-password/${token}">Click here to reset your password</a>
+      <a href="http://localhost:4200/reset-password/${token}">Click here to reset your password</a>
     </p>
     <p>
       This link will expire in 5 minutes. If you did not request a password reset, please ignore this email.
