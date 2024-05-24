@@ -20,14 +20,14 @@ const register = async (req, res) => {
     });
     if (user) {
       return res.status(400).json({
-        error: "user alredy exit",
+        error: "User already exists",
       });
     }
     req.body.password = await generateHasePassword(req.body.password);
     console.log(req.body);
     user = await User.create(req.body);
     res.status(200).json({
-      message: "successfully registered",
+      message: "Successfully registered",
       user,
     });
   } catch (error) {
@@ -43,7 +43,7 @@ const login = async (req, res) => {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ error: "email and password both are required" });
+        .json({ error: "Email and Password both are required" });
     }
     let user = await User.findOne({
       where: {
@@ -51,14 +51,14 @@ const login = async (req, res) => {
       },
     });
     if (!user) {
-      return res.status(400).json({ error: "email does not exist" });
+      return res.status(400).json({ error: "Email does not exist" });
     }
     const isMatch = await verifyPassword(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: "password does not match" });
+      return res.status(400).json({ error: "Password is incorrect" });
     }
     if (!user.status) {
-      return res.status(400).json({ message: "wait for Admin Approval" });
+      return res.status(400).json({ message: "Wait for admin approval" });
     }
     const payLoad = {
       id: user.id,
@@ -76,7 +76,7 @@ const forgotpassword = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ error: "email is required" });
+      return res.status(400).json({ error: "Email is required" });
     }
     const user = await User.findOne({
       where: {
@@ -84,7 +84,7 @@ const forgotpassword = async (req, res) => {
       },
     });
     if (!user) {
-      return res.status(400).json({ error: "email does not exist" });
+      return res.status(400).json({ error: "Email does not exist" });
     }
     const payload = {
       id: user.id,
@@ -125,7 +125,7 @@ const forgotpassword = async (req, res) => {
     `,
     };
     forgotpasswordMail(mailOptions);
-    res.status(200).json({ message: "check your mail" });
+    res.status(200).json({ message: "Check your mail" });
   } catch (error) {
     res.status(500).json({ error });
   }
@@ -136,7 +136,7 @@ const reset_password = async (req, res) => {
   try {
     const { new_password } = req.body;
     if (!new_password) {
-      return res.status(400).json({ error: "password is required" });
+      return res.status(400).json({ error: "Password is required" });
     }
     const { id, email } = req.local;
     console.log(id, new_password);
@@ -147,7 +147,7 @@ const reset_password = async (req, res) => {
       { where: { id } }
     );
     res.status(200).json({
-      message: "password update successufully",
+      message: "Password updated successufully",
     });
   } catch (error) {
     if (error instanceof Sequelize.ValidationError) {
@@ -169,17 +169,17 @@ const changePassword = async(req,res)=>{
           return res.status(404).json({ error: "User not found" });
         }
         const isMatch = await  verifyPassword(old_password,user.password);
-        if(!isMatch) return res.status(400).json({error : "old_password incorrect"})
+        if(!isMatch) return res.status(400).json({error : "Old Password incorrect"})
         user.password = await generateHasePassword(new_password);
       
         await user.save();
-        res.status(200).json({message : "password updated successfully"})
+        res.status(200).json({message : "Password updated successfully"})
         
     } catch (error) {
       if (error instanceof Sequelize.ValidationError) {
         return res.status(400).json({ error: "Validation error" });
       }
-      res.status(500).json({ error: "internal server error"});
+      res.status(500).json({ error: "Internal server error"});
     } 
 }
 
