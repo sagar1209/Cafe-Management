@@ -6,24 +6,24 @@ const addCategory = async (req, res) => {
     const { category } = req.body;
     if (!category) {
       return res.status(400).json({
-        error: "caregory is required",
+        error: "Category is required",
       });
     }
-    let existingCategory  = await Category.findOne({
+    let existingCategory = await Category.findOne({
       where: {
         category: category,
       },
     });
-    if (existingCategory ) {
-      return res.status(400).json({ message: "category already exist" });
+    if (existingCategory) {
+      return res.status(400).json({ message: "Category Already Exists !" });
     }
     const newCategory = await Category.create({ category });
-    res.status(200).json({ message: "category added successfully",newCategory });
+    res.status(200).json({ message: "Category Added Successfully", newCategory });
   } catch (error) {
     if (error instanceof Sequelize.ValidationError) {
-      return res.status(400).json({ error: "Validation error",});
-  }
-    res.status(500).json({ error: "internal server error" });
+      return res.status(400).json({ error: "Validation Error", });
+    }
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -32,27 +32,27 @@ const allCategory = async (req, res) => {
     const categories = await Category.findAll({});
     res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-const categoryById = async(req,res)=>{
-    try {
-        const {id} = req.params;
-        const category = await Category.findOne({
-            where:{
-                id
-            }
-        })
-        if(!category){
-            return res.status(400).json({
-                error: "category does not exist"
-            })
-        }
-        res.status(200).json(category);
-    } catch (error) {
-        res.status(500).json({ error: "internal server error" });
+const categoryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const category = await Category.findOne({
+      where: {
+        id
+      }
+    })
+    if (!category) {
+      return res.status(400).json({
+        error: "Category does not exist !"
+      })
     }
+    res.status(200).json(category);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 const updateCategory = async (req, res) => {
@@ -60,29 +60,29 @@ const updateCategory = async (req, res) => {
     const { id } = req.params;
     const { category } = req.body;
     if (!category) {
-      return res.status(400).json({ error: "category is required" });
+      return res.status(400).json({ error: "Category is required" });
     }
     const [updatedRowsCount] = await Category.update(
-        { category },
-        {
-          where: { id },
-        }
-      );
-      if (updatedRowsCount === 0) {
-        return res.status(404).json({ error: "Category not found or no change made" });
+      { category },
+      {
+        where: { id },
       }
+    );
+    if (updatedRowsCount === 0) {
+      return res.status(404).json({ error: "Category not found or no changes were made" });
+    }
 
-    res.status(200).json({message: "category update successfully"})
+    res.status(200).json({ message: "Category Updated Successfully" })
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
-}
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 
 
 module.exports = {
-    addCategory,
-    allCategory,
-    categoryById,
-    updateCategory
+  addCategory,
+  allCategory,
+  categoryById,
+  updateCategory
 }
