@@ -5,12 +5,12 @@ const { Sequelize, where } = require("sequelize");
 const addProduct = async (req, res) => {
   try {
     const product = await Product.create(req.body);
-    res.status(200).json({ message: "product added successfully", product });
+    res.status(200).json({ message: "Product Added Successfully", product });
   } catch (error) {
     if (error instanceof Sequelize.ValidationError) {
-      return res.status(400).json({ error: "Validation error" });
+      return res.status(400).json({ error: "Validation Error" });
     }
-    res.status(500).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -47,7 +47,7 @@ const allProduct = async (req, res) => {
     res.status(200).json(products);
   } catch (error) {
     console.error(error); // Log the error for debugging purposes
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -61,12 +61,12 @@ const productById = async (req, res) => {
     });
     if (!product) {
       return res.status(400).json({
-        error: "product does not exist",
+        error: "Product does not exist !",
       });
     }
     res.status(200).json(product);
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -79,12 +79,12 @@ const updateProduct = async (req, res) => {
     if (updatedRowsCount === 0) {
       return res
         .status(404)
-        .json({ error: "product not found or no change made" });
+        .json({ error: "Product not found or No Changes were made !" });
     }
 
-    res.status(200).json({ message: "product update successfully" });
+    res.status(200).json({ message: "Product Updated Successfully" });
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -95,11 +95,11 @@ const deleteProduct = async (req, res) => {
       where: { id },
     });
     if (deletedRowsCount === 0) {
-      return res.status(404).json({ error: "product not found" });
+      return res.status(404).json({ error: "Product not found !" });
     }
-    res.status(200).json({ message: "product delete successfully" });
+    res.status(200).json({ message: "Product Deleted Successfully" });
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -109,7 +109,7 @@ const activeOrUnactive = async (req, res) => {
     const product = await Product.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(400).json({ error: "product does not exist" });
+      return res.status(400).json({ error: "Product does not exist !" });
     }
 
     await Product.update({ status: !product.status }, { where: { id } });
@@ -118,15 +118,15 @@ const activeOrUnactive = async (req, res) => {
 
     let message;
     if (updatedProduct.status) {
-      message = "Product activated successfully";
+      message = "Product Activated Successfully";
     } else {
-      message = "Product deactivated successfully";
+      message = "Product Deactivated Successfully";
     }
 
     res.status(200).json({ message });
   } catch (error) {
-    console.error("Error in activeOrUnactive:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Error in changing status !", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
