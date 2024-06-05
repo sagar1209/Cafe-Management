@@ -193,7 +193,7 @@ const getPdf = async (req, res) => {
       }
     );
     if (!result) {
-      return res.status(500).josn({ error });
+      return res.status(500).json({ error });
     }
     pdf
       .create(result)
@@ -227,8 +227,10 @@ const allBills = async (req, res) => {
         "uuid",
         "name",
         "email",
+        "total",
         "contactNumber",
         "paymentMethod",
+        "productDetails",
       ],
     });
     res.status(200).json(bills);
