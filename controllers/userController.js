@@ -27,7 +27,7 @@ const register = async (req, res) => {
     console.log(req.body);
     user = await User.create(req.body);
     res.status(200).json({
-      message: "Successfully registered",
+      message: "You are successfully registered",
       user,
     });
   } catch (error) {
@@ -92,39 +92,39 @@ const forgotpassword = async (req, res) => {
     };
 
     const token = await generateToken(payload, process.env.FORGOT_KEY, "1h");
-    const mailOptions = {
-      from: "sagarsenjaliya423@gmail.com",
-      to: email,
-      subject: "password by cafe management",
-      html: `
-      <p>
-      <b>Dear ${user.name},</b>
-    </p>
-    <p>
-      We received a request to reset your password for your Cafe Management System account.
-    </p>
-    <p>
-      <b>Account Details:</b><br>
-      <b>Name:</b> ${user.name}<br>
-      <b>Email:</b> ${user.email}<br>
-      <b>Role:</b> ${user.role}
-    </p>
-    <p>
-      Please click the link below to reset your password:
-    </p>
-    <p>
-      <a href="http://localhost:4200/reset-password/${token}">Click here to reset your password</a>
-    </p>
-    <p>
-      This link will expire in 5 minutes. If you did not request a password reset, please ignore this email.
-    </p>
-    <p>
-      Thank you,<br>
-      The Cafe Management Team
-    </p>
-    `,
-    };
-    forgotpasswordMail(mailOptions);
+    // const mailOptions = {
+    //   from: "sagarsenjaliya423@gmail.com",
+    //   to: email,
+    //   subject: "password by cafe management",
+    //   html: `
+    //   <p>
+    //   <b>Dear ${user.name},</b>
+    // </p>
+    // <p>
+    //   We received a request to reset your password for your Cafe Management System account.
+    // </p>
+    // <p>
+    //   <b>Account Details:</b><br>
+    //   <b>Name:</b> ${user.name}<br>
+    //   <b>Email:</b> ${user.email}<br>
+    //   <b>Role:</b> ${user.role}
+    // </p>
+    // <p>
+    //   Please click the link below to reset your password:
+    // </p>
+    // <p>
+    //   <a href="http://localhost:4200/reset-password/${token}">Click here to reset your password</a>
+    // </p>
+    // <p>
+    //   This link will expire in 5 minutes. If you did not request a password reset, please ignore this email.
+    // </p>
+    // <p>
+    //   Thank you,<br>
+    //   The Cafe Management Team
+    // </p>
+    // `,
+    // };
+    // forgotpasswordMail(mailOptions);
     res.status(200).json({ message: "Check your mail" });
   } catch (error) {
     res.status(500).json({ error });

@@ -9,6 +9,6 @@ router.get('/allproduct',verifyToken,allProduct);
 router.get('/:id',verifyToken,productById);
 router.patch('/update/:id',verifyToken,checkAdmin,updateProduct);
 router.delete('/delete/:id',verifyToken,checkAdmin,deleteProduct);
-router.patch('/verify/:id',verifyToken,checkAdmin,activeOrUnactive);
+router.patch('/changeStatus/:id',verifyToken,checkAdmin,activeOrUnactive);
 
 module.exports = router;

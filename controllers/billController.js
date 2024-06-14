@@ -16,7 +16,7 @@ const generateBill = async (req, res) => {
       contactNumber,
       paymentMethod,
       productDetails,
-      totalAmount,
+      total,
     } = req.body;
 
     productDetails = JSON.parse(productDetails);
@@ -31,7 +31,7 @@ const generateBill = async (req, res) => {
       contactNumber,
       paymentMethod,
       productDetails,
-      total: totalAmount,
+      total,
       createdBy,
     };
 
@@ -47,7 +47,7 @@ const generateBill = async (req, res) => {
         email,
         contactNumber,
         paymentMethod,
-        totalAmount,
+        total,
         productDetails,
       }
     );
@@ -97,7 +97,7 @@ const generateBill = async (req, res) => {
                 </tr>
                 <tr>
                   <td style="padding: 10px; border: 1px solid #ddd;">Total Amount:</td>
-                  <td style="padding: 10px; border: 1px solid #ddd;">${totalAmount}</td>
+                  <td style="padding: 10px; border: 1px solid #ddd;">${total}</td>
                 </tr>
               </table>
               <p style="margin-top: 20px;">If you have any questions or need further assistance, please feel free to contact us.</p>
@@ -123,7 +123,7 @@ const generateBill = async (req, res) => {
       ],
     };
 
-    sendReportmail(mailOptions);
+    // sendReportmail(mailOptions);
     res.download(pdfPath, `${name}.pdf`, (err) => {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -188,7 +188,7 @@ const getPdf = async (req, res) => {
         email: data.email,
         contactNumber: data.contactNumber,
         paymentMethod: data.paymentMethod,
-        totalAmount: data.total,
+        total: data.total,
         productDetails: data.productDetails,
       }
     );
